@@ -3,14 +3,14 @@ class Coordinates
 
   attr_accessor :x, :y, :direction
   
-  def initialize(coordinates)
-    @x, @y = coordinates[0].to_i, coordinates[1].to_i
-    @direction = coordinates[2].downcase.to_sym
+  def initialize(x, y, direction)
+    @x, @y = x.to_i, y.to_i
+    @direction = direction.downcase.to_sym
     validate
   end
 
   def self.directions_names
-    directions.map{ |direction| direction.to_s.upcase } # that would be in a decorator too
+    directions.map{ |direction| direction.to_s.upcase }
   end
 
   def move
@@ -25,15 +25,15 @@ class Coordinates
 
     raise OutsideTableError if outside_grid?(new_x, new_y)
 
-    self.x, self.y = new_x, new_y
+    @x, @y = new_x, new_y
   end
   
   def left
-    self.direction = new_direction(self.class.clockwise_directions)
+    @direction = new_direction(self.class.clockwise_directions)
   end
     
   def right
-    self.direction = new_direction(self.class.clockwise_directions.reverse)
+    @direction = new_direction(self.class.clockwise_directions.reverse)
   end
 
   private

@@ -1,4 +1,5 @@
 require_relative "boltonizer"
+require_relative "boltonizer_presenter"
 
 class Console
   def initialize
@@ -6,14 +7,14 @@ class Console
   end
   
   def start_session
-    puts boltonizer.greeting
+    puts BoltonizerPresenter.greeting
 
     while command = gets.chomp
-      boltonizer.ask(command)
+      boltonizer.do(command)
       puts "Boltonizer: #{boltonizer.response}"
     end
   rescue Boltonizer::Exit
-    puts boltonizer.goodbye_message
+    puts BoltonizerPresenter.goodbye_message
   end
   
   private

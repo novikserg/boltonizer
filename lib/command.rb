@@ -3,26 +3,26 @@ class Command
 
   ALLOWED_COMMANDS = %i(place move exit left right report)
 
-  attr_reader :command
+  attr_reader :command_name
 
   def initialize(raw_command)
     @raw_command = raw_command
-    @command, @raw_details = raw_command.split(" ")
-    @command = @command.downcase.to_sym if @command
+    @command_name, @raw_details = raw_command.split(" ")
+    @command_name = @command_name.downcase.to_sym if @command_name
     validate
   end
-  
-  def self.allowed_commands_names
-    ALLOWED_COMMANDS.map(&:upcase).join(", ")
-  end
-  
+    
   def details
     parsed_details.captures
   end
 
+  def self.formatted_allowed_commands
+    ALLOWED_COMMANDS.map(&:upcase).join(", ")
+  end
+
   ALLOWED_COMMANDS.each do |allowed_command|
     define_method "#{allowed_command}?" do
-      command == allowed_command
+      command_name == allowed_command
     end
   end
 
@@ -31,7 +31,7 @@ class Command
   attr_reader :raw_command, :raw_details
 
   def validate
-    raise Invalid if command.nil? || !ALLOWED_COMMANDS.include?(command)
+    raise Invalid if command_name.nil? || !ALLOWED_COMMANDS.include?(command_name)
     raise Invalid if place? && incorrect_place_format?
   end
 
@@ -40,6 +40,6 @@ class Command
   end
 
   def parsed_details
-    @parsed_details ||= raw_details.match(/^(\d,)(\d,)(#{Coordinates.directions_names.join("|")})$/)
+    @parsed_details ||= raw_details.match(/^(\d),(\d),(#{Coordinates.directions_names.join("|")})$/)
   end
 end
